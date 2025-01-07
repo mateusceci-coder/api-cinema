@@ -1,17 +1,6 @@
+import { User } from "../../domain/user";
 import prisma from "../../config/db/prisma";
-
-export interface CreateUserParams {
-  name: string;
-  email: string;
-  age: number;
-}
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  age: number;
-}
+import { CreateUserParams } from "../../domain/user";
 
 export interface CreateUserRepository {
   add(createUser: CreateUserParams): Promise<User>;
