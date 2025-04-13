@@ -8,12 +8,14 @@ services:
       - "3000:3000"
     depends_on:
       - db
-    environment:
-      DATABASE_URL: postgres://postgres:password@db:5432/cinema
+    env_file:
+      - .env
+    volumes:
+      - .:/app
 
   db:
     image: postgres:latest
-    container_name: cinema
+    container_name: db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password

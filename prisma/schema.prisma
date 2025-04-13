@@ -8,10 +8,70 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum RoomType {
+  STANDARD
+  PREMIUM
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique @db.VarChar(100)
   name      String   @db.VarChar(100)
-  age       Int   
+  age       Int
+  tickets   Ticket[]
   createdAt DateTime @default(now())
+}
+
+model Movie {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(100)
+  sessions  Session[]
+  description String
+  minimumAge  Int?
+  createdAt DateTime @default(now())
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(100)
+  type      RoomType
+  sessions  Session[]
+  seats     Seat[]
+  createdAt DateTime @default(now())
+}
+
+model Seat {
+  id        String   @id @default(cuid())
+  row       String   @db.VarChar(10)
+  number    Int
+  roomId    String
+  room      Room     @relation(fields: [roomId], references: [id])
+  tickets   Ticket[]
+
+  @@unique([roomId, row, number])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  roomId    String
+  room      Room     @relation(fields: [roomId], references: [id])
+  movieId   String
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  tickets   Ticket[]
+  date      DateTime
+  createdAt DateTime @default(now())
+}
+
+model Ticket {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  seatId    String
+  seat      Seat     @relation(fields: [seatId], references: [id])
+  price     Float
+
+  @@unique([sessionId, seatId])
 }
