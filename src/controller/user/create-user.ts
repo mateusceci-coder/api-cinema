@@ -1,8 +1,8 @@
-import { JoiAdapterProps } from "../adapters/joi";
-import { createUserSchema } from "../schemas/userSchema";
-import { CreateUserUseCase } from "../use-cases/user/create-user";
+import { JoiAdapterProps } from "../../adapters/joi";
+import { createUserSchema } from "../../schemas/userSchema";
+import { CreateUserUseCase } from "../../use-cases/user/create-user";
 import { Request } from "express";
-import { badRequest, created, CreatedResponse } from "./helpers/http";
+import { badRequest, HttpResponse, created } from "../helpers/http";
 
 export class CreateUserController {
   constructor(
@@ -10,7 +10,7 @@ export class CreateUserController {
     private readonly joiAdapter: JoiAdapterProps
   ) {}
 
-  async handle(req: Request): Promise<CreatedResponse> {
+  async handle(req: Request): Promise<HttpResponse> {
     try {
       const params = req.body;
 
